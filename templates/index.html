@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Timetable Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Smooth transition when adding rows */
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            to {opacity: 1;}
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <h2 class="text-center mb-5 fw-bold">Timetable Generator</h2>
+        <form method="POST" action="/generate" class="card p-4 shadow-sm">
+            <div class="mb-4">
+                <label for="class_name" class="form-label fw-semibold">Class Name:</label>
+                <input type="text" id="class_name" name="class_name" class="form-control" required placeholder="Enter Class Name">
+            </div>
+
+            <div class="mb-5">
+                <label for="num_sections" class="form-label fw-semibold">Number of Sections:</label>
+                <input type="number" id="num_sections" name="num_sections" class="form-control" required min="1" max="10" placeholder="1 to 10">
+            </div>
+
+            <!-- Subjects Section -->
+            <div id="subjects" class="mb-5">
+                <h5 class="fw-bold mb-3">Subjects</h5>
+                <div class="row g-3 align-items-center subject-row mb-3">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="subject_name[]" placeholder="Subject Name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" name="subject_priority[]">
+                            <option value="1">Priority 1</option>
+                            <option value="2" selected>Priority 2</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" name="subject_type[]">
+                            <option value="theory" selected>Theory</option>
+                            <option value="lab">Lab</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary w-100" onclick="addSubject()">+ Add More Subjects</button>
+
+            <!-- Fixed Subjects Section -->
+            <div id="fixed_subjects_section" class="mb-5">
+                <h5 class="fw-bold mb-3">Fixed Subjects</h5>
+                <button type="button" class="btn btn-outline-secondary w-100 mb-3" onclick="addFixed()">+ Add More Fixed Subjects</button>
+                <div id="fixed_subjects">
+                    <div class="row g-3 align-items-center fixed-row mb-3">
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="fixed_name[]" placeholder="Subject Name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control" name="fixed_periods[]" placeholder="Total Periods (e.g., 1 or 2)" min="1" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Generate Timetable" class="btn btn-success w-100 btn-lg fw-semibold">
+        </form>
+    </div>
+
+    <script>
+        function addSubject() {
+            const div = document.createElement("div");
+            div.className = "row g-3 align-items-center subject-row mb-3 fade-in";
+            div.innerHTML = `
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="subject_name[]" placeholder="Subject Name" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="subject_priority[]">
+                        <option value="1">Priority 1</option>
+                        <option value="2" selected>Priority 2</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="subject_type[]">
+                        <option value="theory" selected>Theory</option>
+                        <option value="lab">Lab</option>
+                    </select>
+                </div>
+            `;
+            document.getElementById("subjects").appendChild(div);
+        }
+
+        function addFixed() {
+            const div = document.createElement("div");
+            div.className = "row g-3 align-items-center fixed-row mb-3 fade-in";
+            div.innerHTML = `
+                <div class="col-md-7">
+                    <input type="text" class="form-control" name="fixed_name[]" placeholder="Subject Name" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control" name="fixed_periods[]" placeholder="Total Periods (e.g., 1 or 2)" min="1" required>
+                </div>
+            `;
+            document.getElementById("fixed_subjects").appendChild(div);
+        }
+    </script>
+</body>
+</html>
